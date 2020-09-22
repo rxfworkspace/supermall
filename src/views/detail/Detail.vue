@@ -53,7 +53,8 @@ export default {
       recommends:[],
       themeTopYs:[],
       getThemeTopY:null,
-      currentIndex:0
+      currentIndex:0,
+      test:[]
     }
   },
   components:{
@@ -69,6 +70,12 @@ export default {
     DetailBottomBar,
     Scroll,
     BackTop
+  },
+  beforeRouteLeave(to,from,next){
+    // console.log(to);
+    // console.log(from);
+    // console.log(this);
+    next()
   },
   created(){
     //1、保存传入的iid
@@ -107,27 +114,39 @@ export default {
       // })
       
     })
-
     getRecommend().then(res=>{
       this.recommends = res.data.list
+      this.test=[1,2,3]
+      
     })
 
     //给getThemeTopY赋值 防抖
     this.getThemeTopY = debounce(()=>{
       this.themeTopYs = []
       this.themeTopYs.push(0);
-      this.themeTopYs.push(this.$refs.params.$el.offsetTop)
-      this.themeTopYs.push(this.$refs.comment.$el.offsetTop)
-      this.themeTopYs.push(this.$refs.recommend.$el.offsetTop)
+      this.themeTopYs.push(this.$refs.params.$el.offsetTop-44)
+      this.themeTopYs.push(this.$refs.comment.$el.offsetTop-44)
+      this.themeTopYs.push(this.$refs.recommend.$el.offsetTop-44)
       this.themeTopYs.push(Number.MAX_VALUE)
     },100)
+    // this.changes()
+    if(this.test.length!==0){
+      console.log(this.test);
+    }
   },
   mounted(){
+    
   },
   destroyed(){
     this.$bus.$off('itemImgLoad',this.itemImgListener)
   },
   methods:{
+    changes(){
+      getRecommend().then(res=>{
+        this.recommends = res.data.list
+        this.test=[1,2,3]
+      })
+    },
     ...mapActions(['addCart']),
     imageLoad(){
       this.newRefresh()
@@ -136,6 +155,7 @@ export default {
     },
     titleClick(index){
       this.$refs.scroll.scrollTo(0,-this.themeTopYs[index],200)
+      // console.log(11111)
     },
     contentScroll(position){
       const positionY = -position.y

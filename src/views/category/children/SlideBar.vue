@@ -8,7 +8,7 @@
           @click="slideBarItemClick(item, index)"
           class="slide-bar-item"
         >
-          {{ item.title }}
+          {{item.title }}
         </button>
       </template>
     </scroll>
